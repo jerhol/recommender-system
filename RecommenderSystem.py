@@ -22,7 +22,7 @@ class RecommenderSystem:
         self.train_knn()
 
     def process_data(self):
-        self.filtered_df = self.filtered_df.sample(frac=0.1, random_state=42)
+        self.filtered_df = self.filtered_df.sample(frac=0.05, random_state=42)
         self.user_item_matrix = self.filtered_df.pivot_table(index='Book-Title', columns='User-ID', values='Book-Rating').fillna(0)
         self.cosine_similarity_matrix = cosine_similarity(self.user_item_matrix)
 
