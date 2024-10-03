@@ -1,1 +1,1 @@
-web: gunicorn c964-recommender-system:app
+web: gunicorn app:app
