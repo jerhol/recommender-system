@@ -1,9 +1,9 @@
+import os
 from flask import Flask, render_template, request, jsonify
 from RecommenderSystem import RecommenderSystem
 
 app = Flask(__name__)
-
-recommender = RecommenderSystem(books_file="data/Books.csv", ratings_file="data/Ratings.csv")
+recommender = RecommenderSystem()
 user_rated_books = []
 
 @app.route('/')
@@ -33,4 +33,5 @@ def recommend():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

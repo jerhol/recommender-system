@@ -7,9 +7,8 @@ from sklearn.model_selection import train_test_split
 from collections import defaultdict
 
 class RecommenderSystem:
-    def __init__(self, books_file, ratings_file, n_components=50, min_ratings_per_user=10, min_ratings_per_book=25):
-        self.books = pd.read_csv(books_file, low_memory=False)
-        self.ratings = pd.read_csv(ratings_file)
+    def __init__(self, n_components=50, min_ratings_per_user=10, min_ratings_per_book=25):
+        self.filtered_df = pd.read_csv('data/Filtered.csv', low_memory=False)
         self.min_ratings_per_user = min_ratings_per_user
         self.min_ratings_per_book = min_ratings_per_book
         self.n_components = n_components
@@ -23,15 +22,7 @@ class RecommenderSystem:
         self.train_knn()
 
     def process_data(self):
-        complete_df = self.ratings.merge(self.books, on='ISBN')
-        complete_df.drop(index=complete_df[complete_df["Book-Rating"] == 0].index, inplace=True)
-
-        user_counts = complete_df['User-ID'].value_counts()
-        book_counts = complete_df['Book-Title'].value_counts()
-        filtered_df = complete_df[complete_df['User-ID'].isin(user_counts[user_counts >= self.min_ratings_per_user].index)]
-        filtered_df = filtered_df[filtered_df['Book-Title'].isin(book_counts[book_counts >= self.min_ratings_per_book].index)]
-
-        self.user_item_matrix = filtered_df.pivot_table(index='Book-Title', columns='User-ID', values='Book-Rating').fillna(0)
+        self.user_item_matrix = self.filtered_df.pivot_table(index='Book-Title', columns='User-ID', values='Book-Rating').fillna(0)
         self.cosine_similarity_matrix = cosine_similarity(self.user_item_matrix)
 
     def train_svd(self):
@@ -89,8 +80,8 @@ class RecommenderSystem:
         sorted_predictions = sorted(combined_predictions.items(), key=lambda x: x[1], reverse=True)
 
         recommendations = [
-            (book_title, combined_score, self.books[self.books['Book-Title'] == book_title]['Image-URL-M'].values[0],
-             self.books[self.books['Book-Title'] == book_title]['Book-Author'].values[0])
+            (book_title, combined_score, self.filtered_df[self.filtered_df['Book-Title'] == book_title]['Image-URL-M'].values[0],
+             self.filtered_df[self.filtered_df['Book-Title'] == book_title]['Book-Author'].values[0])
             for book_title, combined_score in sorted_predictions[:n]
         ]
 
@@ -137,3 +128,5 @@ class RecommenderSystem:
         mae = np.mean([float(abs(true_r - est)) for (_, _, true_r, est, _) in predictions])
 
         return precision, recall, rmse, mae
+    
+recommender = RecommenderSystem()
