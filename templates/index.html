@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Book Recommender</title>
+    <script src="/static/js/htmx.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Rate a Book</h1>
+    <form id="rate-book-form" hx-post="/rate" hx-target="#rated-books" hx-swap="outerHTML">
+        <label for="book_title">Select Book:</label>
+        <select name="book_title" id="book_title">
+            {% for title in book_titles %}
+                <option value="{{ title }}">{{ title }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="book_rating">Rating (1-10):</label>
+        <input type="number" name="book_rating" min="1" max="10" value="10" required>
+
+        <button type="submit">Rate</button>
+    </form>
+
+    <h2>Rated Books</h2>
+    <div id="rated-books">
+        <ul>
+            {% for book, rating in user_rated_books %}
+                <li>{{ book }} - Rated: {{ rating }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <button hx-post="/clear" hx-target="#rated-books" hx-swap="outerHTML">Clear Ratings</button>
+    <br/><br/>
+
+    <button href="/recommend" hx-get="/recommend" hx-target="#recommendations" hx-swap="outerHTML">Get Recommendations</button>
+    <div id="recommendations"></div>
+</body>
+</html>

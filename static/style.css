@@ -1,0 +1,45 @@
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px 0;
+    gap: 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-container:hover::-webkit-scrollbar {
+    display: block;
+}
+
+.card {
+    flex: 0 0 auto;
+    width: 175px;
+    padding: 20px 10px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.book-cover {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card-info {
+    margin-top: 10px;
+}
+
+.book-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0 5px;
+}
+
+.book-author {
+    font-size: 14px;
+    color: #555;
+}

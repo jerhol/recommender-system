@@ -1,0 +1,14 @@
+<div id="recommendations">
+    <div class="scroll-container">
+        {% for book_title, score, image_url, author in recommendations %}
+            <div class="card">
+                <img src="{{ image_url }}" alt="Book cover for {{ book_title }}" class="book-cover">
+                <div class="card-info">
+                    <h3 class="book-title">{{ book_title }}</h3>
+                    <p class="book-author">{{ author }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+

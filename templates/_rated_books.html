@@ -1,0 +1,7 @@
+<div id="rated-books">
+    <ul>
+        {% for book, rating in user_rated_books %}
+            <li>{{ book }} - Rated: {{ rating }}</li>
+        {% endfor %}
+    </ul>
+</div>
